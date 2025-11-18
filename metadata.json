@@ -1,0 +1,5 @@
+{
+  "name": "Bohr Diagram Viewer",
+  "description": "An interactive web application to visualize Bohr diagrams for all chemical elements. Features a clean interface with light and dark mode support for optimal viewing.",
+  "requestFramePermissions": []
+}
