@@ -215,22 +215,57 @@
 
         const ElementSelector = ({ onSearch, error }) => {
           const [query, setQuery] = useState('Hydrogen');
+          const [suggestions, setSuggestions] = useState([]);
+          const [showSuggestions, setShowSuggestions] = useState(false);
+
+          const handleChange = (e) => {
+            const val = e.target.value;
+            setQuery(val);
+            
+            if (val.trim()) {
+                const lowerVal = val.toLowerCase();
+                const filtered = ELEMENTS.filter(el => 
+                    el.name.toLowerCase().startsWith(lowerVal) || 
+                    el.symbol.toLowerCase().startsWith(lowerVal) ||
+                    el.atomicNumber.toString().startsWith(lowerVal)
+                );
+                setSuggestions(filtered);
+                setShowSuggestions(true);
+            } else {
+                setShowSuggestions(false);
+            }
+          };
+
+          const handleSelect = (element) => {
+            setQuery(element.name);
+            setShowSuggestions(false);
+            onSearch(element.name);
+          };
+          
+          const handleBlur = () => {
+             // Delay to allow click to register
+             setTimeout(() => setShowSuggestions(false), 200);
+          };
 
           const handleSubmit = (e) => {
             e.preventDefault();
+            setShowSuggestions(false);
             onSearch(query);
           };
 
           return (
-            <div className="w-full max-w-md">
-              <form onSubmit={handleSubmit} className="flex items-center gap-2 bg-white dark:bg-gray-800 p-2 rounded-lg shadow-md">
+            <div className="w-full max-w-md relative">
+              <form onSubmit={handleSubmit} className="flex items-center gap-2 bg-white dark:bg-gray-800 p-2 rounded-lg shadow-md z-20 relative">
                 <input
                   type="text"
                   value={query}
-                  onChange={(e) => setQuery(e.target.value)}
+                  onChange={handleChange}
+                  onFocus={(e) => handleChange(e)}
+                  onBlur={handleBlur}
                   placeholder="Enter name, symbol, or atomic #"
                   className="w-full px-4 py-2 bg-transparent text-gray-900 dark:text-white border-none focus:ring-0 placeholder-gray-500"
                   aria-label="Element search input"
+                  autoComplete="off"
                 />
                 <button
                   type="submit"
@@ -239,6 +274,22 @@
                   View
                 </button>
               </form>
+              
+              {showSuggestions && suggestions.length > 0 && (
+                  <ul className="absolute w-full bg-white dark:bg-gray-800 mt-2 rounded-lg shadow-xl max-h-60 overflow-y-auto z-10 border border-gray-100 dark:border-gray-700">
+                      {suggestions.map((el) => (
+                          <li 
+                            key={el.atomicNumber}
+                            onClick={() => handleSelect(el)}
+                            className="px-4 py-2 cursor-pointer hover:bg-blue-50 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 border-b border-gray-100 dark:border-gray-700 last:border-none flex justify-between items-center"
+                          >
+                             <span>{el.name} <span className="text-gray-400 text-sm">({el.symbol})</span></span>
+                             <span className="text-gray-400 text-xs">#{el.atomicNumber}</span>
+                          </li>
+                      ))}
+                  </ul>
+              )}
+
               {error && <p className="mt-2 text-red-500 text-sm text-center">{error}</p>}
             </div>
           );
