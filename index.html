@@ -2,15 +2,20 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <!-- Embedded Favicon to prevent 404 errors -->
     <link rel="icon" href="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M12 2L2 7l10 5 10-5-10-5z'%3e%3c/path%3e%3cpath d='M2 17l10 5 10-5'%3e%3c/path%3e%3cpath d='M2 12l10 5 10-5'%3e%3c/path%3e%3c/svg%3e">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bohr Diagram Viewer</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         darkMode: 'class',
       }
     </script>
+    
+    <!-- Custom Animations -->
     <style>
       @keyframes draw-stroke {
         to {
@@ -37,18 +42,18 @@
       }
     </style>
     
-    <!-- React & ReactDOM (UMD) -->
+    <!-- React & ReactDOM (UMD) for static deployment -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     
-    <!-- Babel for in-browser transpilation -->
+    <!-- Babel for in-browser transpilation of JSX -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script type="importmap">
 {
   "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
     "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/"
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/"
   }
 }
 </script>
@@ -56,11 +61,15 @@
   <body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
     <div id="root"></div>
 
-    <!-- Application Logic Inlined to avoid MIME type issues on GitHub Pages -->
+    <!-- 
+      APPLICATION LOGIC
+      All TypeScript/React code is inlined here to ensure it runs 
+      without build steps or MIME type errors on GitHub Pages.
+    -->
     <script type="text/babel">
         const { useState, useEffect, useCallback } = React;
 
-        // --- Data ---
+        // --- DATA: Elements ---
         const ELEMENTS = [
           { name: 'Hydrogen', symbol: 'H', atomicNumber: 1, shells: [1] },
           { name: 'Helium', symbol: 'He', atomicNumber: 2, shells: [2] },
@@ -182,7 +191,7 @@
           { name: 'Oganesson', symbol: 'Og', atomicNumber: 118, shells: [2, 8, 18, 32, 32, 18, 8] },
         ];
 
-        // --- Components ---
+        // --- COMPONENTS ---
 
         const ThemeToggle = ({ theme, toggleTheme }) => {
           return (
@@ -344,7 +353,7 @@
           );
         };
 
-        // --- Main App ---
+        // --- MAIN APP ---
 
         const App = () => {
           const [theme, setTheme] = useState(() => {
